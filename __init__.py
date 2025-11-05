@@ -7,17 +7,17 @@ from tqdm import tqdm
 import re
 import folder_paths
 from nodes import LoraLoader
-from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
 
 # Logger initialization 
-MSG_PREFIX = "[CivitAI LORA Loader]"
+MSG_PREFIX = "[OnDemand LORA Loader]"
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-handler = logging.StreamHandler(sys.stdout)
-formatter = logging.Formatter(MSG_PREFIX + ' %(levelname)s: %(message)s')
-handler.setFormatter(formatter)
-logger.addHandler(handler)
+if not logger.handlers:
+    handler = logging.StreamHandler(sys.stdout)
+    formatter = logging.Formatter(MSG_PREFIX + ' %(levelname)s: %(message)s')
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
 
 # Function to load configuration 
 def load_config(config_filename="config.json"):
@@ -55,7 +55,7 @@ def load_config(config_filename="config.json"):
 
 NODE_CONFIG = load_config()
 
-class CivitAILoraLoader:
+class OnDemandLoraLoader:
 
     @classmethod
     def INPUT_TYPES(cls):
@@ -79,25 +79,15 @@ class CivitAILoraLoader:
     RETURN_TYPES = ("MODEL", "CLIP")
     RETURN_NAMES = ("model", "clip")
     FUNCTION = "download_lora"
-    DESCRIPTION = "Load loras models from CivitAI, they will be downloaded automatically if not found.\nPut a valid CivitAI API key in form field 'api_key' or in CIVITAI_TOKEN environment variable to access private models"
+    DESCRIPTION = "Load loras models from CivitAI/HuggingFace, they will be downloaded automatically if not found.\nPut a valid CivitAI/HuggingFace API key in form field 'api_key' or in CIVITAI_TOKEN/HUGGINGFACE_TOKEN environment variable to access private models"
 
     CATEGORY = "loaders"
-
-    def add_query_param(self, url, param_key, param_value):
-        parsed_url = urlparse(url)
-        query_dict = parse_qs(parsed_url.query)
-        query_dict[param_key] = [param_value]
-        encoded_query = urlencode(query_dict, doseq=True)
-        new_url = urlunparse(parsed_url._replace(query=encoded_query))
-        return new_url
 
     def download_lora(self, model, lora_name, strength_model, strength_clip, clip=None, api_key=None, download_chunks=None):
         self.lora_loader = LoraLoader()
 
         loras_models_dir = os.path.join(folder_paths.models_dir, "loras")
         os.makedirs(loras_models_dir, exist_ok=True)
-
-        api_key = api_key or os.environ.get('CIVITAI_TOKEN')
 
         # get model info from url
         lora_url = None
@@ -109,11 +99,20 @@ class CivitAILoraLoader:
             logger.error(f"Lora URL not found for name: {lora_name}")
             return model, clip
 
-        if api_key:
-            logger.info("Using provided API key for CivitAI.")
-            lora_url = self.add_query_param(lora_url, 'token', api_key) if api_key else lora_url
+        if lora_url.startswith("https://civitai.com"):
+            api_key = api_key or os.environ.get('CIVITAI_TOKEN')
+        
+        if lora_url.startswith("https://huggingface.co"):
+            api_key = api_key or os.environ.get('HUGGINGFACE_TOKEN')
 
-        response = requests.get(lora_url, stream=True, allow_redirects=True)
+        headers = None
+        if api_key:
+            logger.info("Using provided API key")
+            headers = {
+                "Authorization": f"Bearer {api_key}"
+            }
+
+        response = requests.get(lora_url, stream=True, allow_redirects=True, headers=headers)
         response.raise_for_status()  # Raise an exception for bad status codes
         lora_filename = None
 
@@ -156,11 +155,11 @@ class CivitAILoraLoader:
 
 
 NODE_CLASS_MAPPINGS = {
-    "CivitAILoraLoader": CivitAILoraLoader
+    "OnDemandLoraLoader": OnDemandLoraLoader
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "CivitAILoraLoader": "CivitAI Lora Loader"
+    "OnDemandLoraLoader": "On Demand Lora Loader"
 }
 
 __all__ = ['NODE_CLASS_MAPPINGS', 'NODE_DISPLAY_NAME_MAPPINGS']
