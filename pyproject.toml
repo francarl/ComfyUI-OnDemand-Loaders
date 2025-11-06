@@ -1,5 +1,5 @@
 [project]
-name = "ondemand-loaders"
+name = "ComfyUI-OnDemand-Loaders.git"
 description = "suite of custom nodes that allows you to download and apply various models directly from Civitai or HuggingFace. It simplifies your workflow by managing model downloads automatically, so you don't have to manually download files and place them in the correct folders."
 version = "1.0.0"
 license = {file = "LICENSE"} 
