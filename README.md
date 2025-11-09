@@ -20,6 +20,7 @@ This package includes the following nodes:
 *   `OnDemand VAE Loader`
 *   `OnDemand UNET Loader`
 *   `OnDemand CLIP Loader`
+*   `OnDemand ControlNet Loader`
 *   `OnDemand GGUF Loader` (Note: Requires [ComfyUI-GGUF](https://github.com/jquesnelle/ComfyUI-GGUF) to be installed.)
 
 ## Installation with ComfyUI-Manager
@@ -88,6 +89,12 @@ You can get the download link from a model's page on Civitai/HuggingFace by righ
         {
             "name": "Wan2.2-T2V-A14B-HighNoise-Q2_K",
             "url": "https://huggingface.co/QuantStack/Wan2.2-T2V-A14B-GGUF/resolve/main/HighNoise/Wan2.2-T2V-A14B-HighNoise-Q2_K.gguf"
+        }
+    ],
+    "controlnet_models": [
+        {
+            "name": "Qwen-Image-InstantX-ControlNet-Union",
+            "url": "https://huggingface.co/Comfy-Org/Qwen-Image-InstantX-ControlNets/resolve/main/split_files/controlnet/Qwen-Image-InstantX-ControlNet-Union.safetensors"
         }
     ]
 }

@@ -46,5 +46,11 @@
             "name": "Wan2.2-T2V-A14B-HighNoise-Q2_K",
             "url": "https://huggingface.co/QuantStack/Wan2.2-T2V-A14B-GGUF/resolve/main/HighNoise/Wan2.2-T2V-A14B-HighNoise-Q2_K.gguf"
         }
+    ],
+    "controlnet_models": [
+        {
+            "name": "Qwen-Image-InstantX-ControlNet-Union",
+            "url": "https://huggingface.co/Comfy-Org/Qwen-Image-InstantX-ControlNets/resolve/main/split_files/controlnet/Qwen-Image-InstantX-ControlNet-Union.safetensors"
+        }
     ]
 }

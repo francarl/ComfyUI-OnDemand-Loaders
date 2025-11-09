@@ -8,7 +8,7 @@ import re
 import folder_paths
 from pathlib import Path
 import importlib.util
-from nodes import LoraLoader, UNETLoader, CheckpointLoaderSimple, VAELoader, CLIPLoader
+from nodes import LoraLoader, UNETLoader, CheckpointLoaderSimple, VAELoader, CLIPLoader,  ControlNetLoader
 
 LOG_PREFIX = "[ComfyUI-OnDemand-Loaders]"
 
@@ -456,3 +456,46 @@ class OnDemandGGUFLoader:
 
         # Load the gguf using the existing UnetLoaderGGUF
         return self.gguf_loader.load_unet(model_filename)
+
+class OnDemandControlNetLoader:
+    
+    @classmethod
+    def INPUT_TYPES(cls):
+
+        NODE_CONFIG = load_config()
+        models = [model["name"] for model in NODE_CONFIG.get("controlnet_models", []) ]
+       
+        return {
+            "required": {
+                "control_net_name": (models,)
+            },
+            "optional": {
+                "api_key": ("STRING", {"default": None, "multiline": False}),
+                "download_chunks": ("INT", {"default": 4, "min": 1, "max": 12, "step": 1})
+            }
+        }
+
+    RETURN_TYPES = ("CONTROL_NET",)
+    FUNCTION = "download_controlnet"
+    DESCRIPTION = "Load control_net models from CivitAI/HuggingFace, they will be downloaded automatically if not found.\nPut a valid CivitAI/HuggingFace API key in form field 'api_key' or in CIVITAI_TOKEN/HUGGINGFACE_TOKEN environment variable to access private models"
+    CATEGORY = "loaders"
+
+    def download_controlnet(self, control_net_name, api_key=None, download_chunks=None):
+        self.controlnet_loader = ControlNetLoader()
+
+        destination_dir = os.path.join(folder_paths.models_dir, "controlnet")
+
+        model_url = _get_model_url_from_config(control_net_name, "controlnet_models")
+        if not model_url:
+            return None
+
+        api_key = _get_api_key_for_url(model_url, api_key)
+
+        model_filepath = _download_model(model_url, control_net_name, destination_dir, api_key, download_chunks)
+        if not model_filepath:
+            return None # Return None for all outputs if download fails
+
+        model_filename = os.path.basename(model_filepath)
+
+        # Load vae using the existing VAELoader
+        return self.controlnet_loader.load_controlnet(model_filename)
