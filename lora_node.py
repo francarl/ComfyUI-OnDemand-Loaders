@@ -168,10 +168,10 @@ async def lora_changed_handler(request):
                 logger.error(f"Lora '{lora_name}' not found in LORA_CONFIG.")
         else:
             logger.error("LORA_CONFIG is not loaded.")
+    if SELECTED_LORA:
+        return web.Response(status=200, text=json.dumps(SELECTED_LORA, indent=4), content_type='application/json')
     else:
-        return web.Response(status=400, text=json.dumps({"error": "lora_name not provided"}), content_type='application/json')
-    return web.Response(status=200, text=json.dumps({"status": "ok"}), content_type='application/json')
-
+        return web.Response(status=404, text=json.dumps({"error": "No LoRA selected yet."}), content_type='application/json')
 
 @server.PromptServer.instance.routes.get("/on_demand_loader/get_selected_lora_info")
 async def get_selected_lora_info_handler(request):
