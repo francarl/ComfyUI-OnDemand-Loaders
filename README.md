@@ -134,3 +134,15 @@ This allows you to manage your LoRA collection directly on the Civitai website w
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE.txt](LICENSE.txt) file for details.
+
+## Credits
+
+This project uses JavaScript and CSS code from [Comfyui-Resolution-Master](https://github.com/Azornes/Comfyui-Resolution-Master) by Azornes.
+
+## Changelog
+
+### 1.0.9
+
+- **OnDemand Civitai Liked Lora Loader Improvements**:
+    - Enhanced LoRA information display: now includes author, trigger words, and a direct link to the model page on Civitai.
+    - Improved selection UI for a better user experience.
