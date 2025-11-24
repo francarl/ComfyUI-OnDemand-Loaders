@@ -49,6 +49,9 @@ function addOrUpdateLoraInfoWidgets(node, loraInfo) {
 		hideWidgetIfExists(node, "base_model");
 	}
 	node.computeSize();
+	if (typeof node.setDirtyCanvas === 'function') {
+      node.setDirtyCanvas(true, true);
+    }
 }
 
 function hideWidgetIfExists(node, widgetName) {
@@ -97,7 +100,7 @@ app.registerExtension({
 						console.log("[ComfyUI-OnDemand-Loaders] Lora Name:", loraNameWidget.value);
 
 						loraNameWidget.searchableCombo.show(loraNameWidget.options.values, {
-							event: e,
+							event: e.e,
 							title: 'Select Preset',
 							currentMode: 'list',
 							initialExpanded: false,

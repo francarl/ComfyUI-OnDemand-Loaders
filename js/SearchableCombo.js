@@ -214,7 +214,7 @@ export class SearchableCombo {
         }
 
         // Focus search input
-        setTimeout(() => this.searchInput.focus(), 50);
+        setTimeout(() => this.searchInput.focus(), 500);
     }
 
     /**
