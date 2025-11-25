@@ -23,6 +23,8 @@ This package includes the following nodes:
 *   `OnDemand CLIP Loader`
 *   `OnDemand ControlNet Loader`
 *   `OnDemand GGUF Loader` (Note: Requires [ComfyUI-GGUF](https://github.com/city96/ComfyUI-GGUF) to be installed.)
+*   `OnDemand DualCLIP Loader`
+*   `OnDemand CLIP Vision Loader`
 
 ## Installation with ComfyUI-Manager
 Search for "OnDemand-Loaders" in custom node list.
@@ -141,8 +143,22 @@ This project uses JavaScript and CSS code from [Comfyui-Resolution-Master](https
 
 ## Changelog
 
+### 1.0.11
+
+- **New Nodes**:
+    - Added `OnDemand DualCLIP Loader` for dual clip loading
+    - Added `OnDemand CLIP Vision Loader` for clip vision models loading
+
+### 1.0.10
+
+- **Bug Fixes**:
+    - Fixed an issue where the `OnDemand Civitai Liked Lora Loader` would sometimes fail to load models due to an incorrect API response parsing.
+    - Addressed a problem where the `config.json` file was not being reloaded correctly after modifications, requiring a full ComfyUI restart.
+
 ### 1.0.9
 
 - **OnDemand Civitai Liked Lora Loader Improvements**:
     - Enhanced LoRA information display: now includes author, trigger words, and a direct link to the model page on Civitai.
     - Improved selection UI for a better user experience.
+
+

@@ -41,6 +41,12 @@
             "url": "https://huggingface.co/openai/clip-vit-large-patch14/resolve/main/pytorch_model.bin"
         }
     ],
+    "clip_vision": [
+        {
+            "name": "sigclip_vision_patch14_384",
+            "url": "https://huggingface.co/Comfy-Org/sigclip_vision_384/resolve/main/sigclip_vision_patch14_384.safetensors"
+        }
+    ],
     "gguf_models": [
         {
             "name": "Wan2.2-T2V-A14B-HighNoise-Q2_K",
