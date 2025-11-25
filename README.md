@@ -143,6 +143,11 @@ This project uses JavaScript and CSS code from [Comfyui-Resolution-Master](https
 
 ## Changelog
 
+### 1.0.12
+
+- **Bug Fixes**:
+    - Fixed CLIP Vision Loader
+
 ### 1.0.11
 
 - **New Nodes**:
