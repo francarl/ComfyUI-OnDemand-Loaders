@@ -124,6 +124,11 @@ def _download_model(model_url, model_name, destination_dir, api_key, download_ch
     Returns:
         str: The full path to the downloaded model file, or None if an error occurred.
     """
+    if model_url == 'offline':
+        logger.info(f"'{model_name}' is marked as offline. Assuming local file exists and skipping download.")
+        # The user expects the model to exist, so we return the assumed path.
+        return os.path.join(destination_dir, model_name)
+
     os.makedirs(destination_dir, exist_ok=True)
 
     headers = None
@@ -643,4 +648,3 @@ class OnDemandControlNetLoader:
 
         # Load vae using the existing VAELoader
         return self.controlnet_loader.load_controlnet(model_filename)
-

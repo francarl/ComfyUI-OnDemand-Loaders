@@ -57,6 +57,13 @@ After installation, create and configure a `config.json` file to list the models
 
 You can get the download link from a model's page on Civitai/HuggingFace by right-clicking the download button and copying the link address.
 
+> **Note on Local Models**: If you have a model that is already stored locally and you do not want the loader to attempt to download it, you can set its `url` to `"offline"`. This will skip the download process and assume the file exists in the correct directory. The node will expect the local filename to match the `name` field. For example:
+> ```json
+> {
+>     "name": "my-local-model.safetensors",
+>     "url": "offline"
+> }
+> ```
 **Example `config.json`:**
 ```json
 { 
@@ -143,6 +150,11 @@ This project uses JavaScript and CSS code from [Comfyui-Resolution-Master](https
 
 ## Changelog
 
+### 1.0.13
+
+- **New Feature**:
+    - Added support for offline models. Set the `url` to `"offline"` in `config.json` to skip downloading and use a local file.
+
 ### 1.0.12
 
 - **Bug Fixes**:
@@ -165,5 +177,3 @@ This project uses JavaScript and CSS code from [Comfyui-Resolution-Master](https
 - **OnDemand Civitai Liked Lora Loader Improvements**:
     - Enhanced LoRA information display: now includes author, trigger words, and a direct link to the model page on Civitai.
     - Improved selection UI for a better user experience.
-
-
