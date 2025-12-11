@@ -27,19 +27,26 @@ def _fetch_data_from_api(url):
             "Authorization": f"Bearer {apikey}"
         } if apikey else None
 
-        response = requests.get(url, headers=headers)
-        response.raise_for_status()  
-        
-        return response.json()
-    
+        items = []
+        next_page = True
+        while next_page:
+            response = requests.get(url, headers=headers)
+            response.raise_for_status()  
+            data = response.json()
+            items = [*items, *data.get("items", [])]
+            if data.get('metadata') and data.get('metadata').get('nextPage'):
+                url = data.get('metadata').get('nextPage')
+            else:
+                next_page = False
+        return items    
     except Exception as e:
         logger.error("Error in retreving data from Civitai API: {e}", e)
         return None
 
-def _transform_data_to_loras_structure(data):
+def _transform_data_to_loras_structure(items):
     loras_list = []
-    
-    for item in data.get("items", []):
+
+    for item in items:
         main_model_name = item.get("name", "")
         model_versions = item.get("modelVersions", [])
         model_id = item.get("id")
